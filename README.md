@@ -527,12 +527,6 @@ breaks conversational consistency, and it was reverted to inherit-and-disclose.
   three raw excerpts, which for *"what is OR2A?"* were three chunks of the *same
   file*. Replaced with whole-corpus synthesis.
 
-**Honest summary.** The code was written faster than I could have typed it, and
-a competent engineer with AI assistance should be expected to produce this
-volume. What the tool could not do was decide *what* to build, notice that a
-plausible-looking average was wrong by 40%, or judge which of two defensible
-behaviours was right for an ops manager mid-incident. Those calls are the
-substance of this project, and they are mine.
 
 ---
 
