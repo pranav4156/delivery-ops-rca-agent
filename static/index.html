@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Delivery Operations RCA</title>
+<link rel="stylesheet" href="/static/style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="app-header__title">Delivery Ops RCA</div>
+  <div class="app-header__meta">
+    <span class="meta-text">2026-04-22 · 233 stores · 9 cities</span>
+    <span class="status" id="status-indicator"><span class="status-dot" id="status-dot"></span><span id="status-label">connecting</span></span>
+  </div>
+</header>
+
+<div class="context-strip" id="context-strip" aria-live="polite">
+  <button class="context-strip__summary" id="context-strip-toggle">
+    <span id="context-strip-text">No context yet</span>
+    <span class="chevron">⌄</span>
+  </button>
+</div>
+
+<main class="layout">
+
+  <section class="chat-col">
+    <div class="chat-log" id="chat-log" role="log" aria-live="polite">
+      <div class="empty-state" id="empty-state">
+        <h1>Delivery Operations RCA</h1>
+        <p>Ask why a store or city missed its SLA on 2026-04-22.</p>
+        <div class="starter-chips">
+          <button class="starter-chip" data-msg="How did Bangalore do?">How did Bangalore do?</button>
+          <button class="starter-chip" data-msg="Why did STORE_003 underperform?">Why did STORE_003 underperform?</button>
+          <button class="starter-chip" data-msg="Worst 5 stores in Mumbai">Worst 5 stores in Mumbai</button>
+          <button class="starter-chip" data-msg="How many stores had pileup?">How many stores had pileup?</button>
+        </div>
+        <div class="tap-hint">tap to start</div>
+      </div>
+    </div>
+
+    <form class="composer" id="composer">
+      <textarea
+        id="composer-input"
+        class="composer__input"
+        placeholder="Ask about a store or city…"
+        rows="1"
+        autofocus
+      ></textarea>
+      <button type="submit" class="composer__send" id="composer-send" aria-label="Send">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 12L20 4L14 20L11 13L4 12Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+      </button>
+    </form>
+  </section>
+
+  <aside class="context-panel" id="context-panel" aria-live="polite">
+    <div class="context-panel__card">
+      <div class="context-panel__title">CONTEXT</div>
+
+      <div class="context-field" data-field="store">
+        <div class="context-field__label">STORE</div>
+        <div class="context-field__value placeholder" data-value="store">—</div>
+      </div>
+
+      <div class="context-field" data-field="city">
+        <div class="context-field__label">CITY</div>
+        <div class="context-field__value placeholder" data-value="city">—</div>
+      </div>
+
+      <div class="context-field" data-field="date">
+        <div class="context-field__label">DATE</div>
+        <div class="context-field__value placeholder" data-value="date">—</div>
+      </div>
+
+      <div class="context-field" data-field="hours">
+        <div class="context-field__label">HOURS</div>
+        <div class="context-field__value placeholder" data-value="hours">—</div>
+      </div>
+
+      <div class="context-panel__divider"></div>
+
+      <div class="context-panel__intent">
+        <span class="context-panel__intent-label">intent</span>
+        <span class="context-panel__intent-value placeholder" data-value="intent">—</span>
+      </div>
+
+      <div class="context-panel__legend">↩ carried from earlier</div>
+    </div>
+
+    <button class="new-conversation" id="new-conversation">New conversation</button>
+  </aside>
+
+</main>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

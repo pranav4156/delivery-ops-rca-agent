@@ -1,0 +1,29 @@
+# ── M1: Data foundation ────────────────────────────────────────────
+duckdb>=1.1.0
+pandas>=2.2.0
+python-dotenv>=1.0.0
+
+# ── M2: Testing ────────────────────────────────────────────────────
+pytest>=8.0.0
+
+# ── M3: Agent orchestration ────────────────────────────────────────
+langgraph>=0.2.0
+langchain-core>=0.3.0
+
+# ── LLM provider ───────────────────────────────────────────────────────
+# Groq is the configured provider. It speaks the OpenAI chat-completions API,
+# so the `openai` package serves both Groq and OpenAI — one dependency, two
+# providers.
+#
+# The alternatives below are optional: app/llm.py imports every SDK lazily,
+# inside the provider constructor, so an uninstalled one costs nothing and
+# cannot break startup.
+openai>=1.50.0
+
+# google-genai>=1.0.0
+# anthropic>=0.40.0
+
+# ── M4: MCP + API ──────────────────────────────────────────────────
+mcp>=1.0.0
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0

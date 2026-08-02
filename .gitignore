@@ -1,0 +1,33 @@
+# ── secrets ───────────────────────────────────────────────────────────
+# .env holds a live API key. .env.example is committed instead.
+.env
+.env.local
+.env.*.local
+
+# ── python ────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+
+# ── environments ──────────────────────────────────────────────────────
+.venv/
+venv/
+env/
+
+# ── local artefacts ───────────────────────────────────────────────────
+*.duckdb
+*.duckdb.wal
+*.log
+
+# ── os / editor ───────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
