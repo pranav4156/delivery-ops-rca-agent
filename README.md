@@ -39,7 +39,6 @@ booking gap (only 32 of 59 rider slots filled, 3 cancelled, 49%).
 - [Testing](#testing)
 - [Design decisions](#design-decisions-and-why)
 - [Known limits](#known-limits)
-- [AI tools used](#a-note-on-ai-tools)
 
 ---
 
@@ -111,7 +110,7 @@ reintroduce them.
 ### 1. Clone and install
 
 ```bash
-git clone https://github.com/<your-username>/delivery-ops-rca-agent.git
+git clone https://github.com/pranav4156/delivery-ops-rca-agent.git
 cd delivery-ops-rca-agent
 
 python3 -m venv .venv
@@ -460,8 +459,8 @@ it says "I can":
 
 - **One day of data** (2026-04-22). No trends, no week-over-week — the agent
   declines these explicitly rather than describing one day as a trend.
-- **Sessions are in-memory.** A restart clears them; the brief did not require
-  persistence.
+- **Sessions are in-memory.** A restart clears them; persistence wasn't needed
+  for this version.
 - **Nested grouping** — *"top 5 stores in each of the worst 3 cities"* degrades
   to a flat top-5 rather than answering the nested form.
 - **`BETWEEN` thresholds** — *"or2a between 10 and 20 min"* is declined rather
@@ -469,64 +468,6 @@ it says "I can":
 - **Tier 3 answers are `screened`, not `validated`.** The known traps are
   blocked; the answer itself is not independently verified, and the SQL is always
   shown so it can be checked.
-
----
-
-## A note on AI tools
-
-Required by the brief, and worth being precise about.
-
-**What I did myself.** The design work: reading the dataset, finding the traps
-(the unweighted rollup and the slot-level replication), deciding the threshold
-question, choosing impact ranking over exhaustive output, and drawing the line
-between what is a tool, what is a prompt and what must be deterministic code.
-Every architectural decision here — three tiers, provenance labels, declining
-rather than guessing, the LLM never touching a number — is mine, and I can defend
-each one in the walkthrough.
-
-I also drove the entire debugging cycle: running the agent, finding bugs by
-reading output, and deciding which were real problems versus acceptable
-behaviour. Roughly 25 distinct bugs were found and closed this way — several of
-them, like a threshold value being silently read as a store code, only surfaced
-through deliberate adversarial testing I designed.
-
-**Where AI tools helped.**
-
-| Tool | Used for |
-|---|---|
-| **Claude (Anthropic)**, via an agentic coding environment | Pair-programming throughout — implementing modules against decisions I made, proposing options with tradeoffs when I asked for them, writing test scaffolding, and drafting documentation. I reviewed and directed every change. |
-| **Groq API** (`openai/gpt-oss-120b`) | The runtime LLM — intent classification, question splitting, summary sentences, Tier-3 SQL |
-| **`@modelcontextprotocol/server-filesystem`** | The MCP server the agent consumes |
-
-My working method was to state a problem, ask for options with reasoning, choose
-one, then review the implementation. Where I disagreed with a proposal I said so
-and it was changed — the inherited-scope behaviour is one example: the first
-implementation dropped an inherited city on "list all stores", I argued that
-breaks conversational consistency, and it was reverted to inherit-and-disclose.
-
-**What I discarded.**
-
-- **RAG for the reference documents.** Considered, measured, rejected. The whole
-  corpus is ~1,800 tokens — smaller than the classifier prompt. Embeddings and a
-  vector store would have been several hours of work to produce a *worse* answer.
-  A test now fails if the corpus grows past the point where that reasoning holds.
-- **Letting the LLM write SQL freely.** The first instinct for "answer any
-  question". Rejected after measuring the damage: `AVG(w_avg_or2a)` is wrong by
-  up to 40% and changes the ranking. Replaced with shaped views that make the
-  wrong query unwritable.
-- **Dumping conversation history into the prompt** for multi-turn. Simpler to
-  write, impossible to inspect. Replaced with explicit slots, so the resolved
-  context is visible in the UI and assertable in tests.
-- **Prompt-only guardrails.** A warning in a prompt is advice a model can ignore,
-  with nothing downstream able to tell whether it did. Replaced with mechanical
-  screening.
-- **Gemini as the provider.** Abandoned after the issued key hit a known
-  zero-quota restriction. Groq replaced it in one config line — which is what the
-  provider abstraction is for.
-- **Retrieval-based document answering.** The original implementation returned
-  three raw excerpts, which for *"what is OR2A?"* were three chunks of the *same
-  file*. Replaced with whole-corpus synthesis.
-
 
 ---
 
